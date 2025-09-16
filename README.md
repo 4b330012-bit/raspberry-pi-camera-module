@@ -47,3 +47,15 @@ sudo nano /boot/firmware/config.txt
 |IMX219	        |dtoverlay=imx219                     |
 |IMX477	        |dtoverlay=imx477                     |
 |IMX708	        |dtoverlay=imx708                     |
+
+注意：要將IMX290連接到Raspberry Pi 5，需要在指令目錄下新增json文件，操作如下：
+```bibtex
+sudo wget https://www.waveshare.net/w/upload/7/7a/Imx290.zip 
+sudo unzip Imx290.zip 
+sudo cp imx290.json /usr/share/libcamera/ipa/rpi/pisp
+```
+雙眼相機配置
+
+目前CM4載板和Raspberry Pi 5均支援連接兩個相機。
+如果要同時連接兩個鏡頭，可以在對應的攝影機配置語句後面加上「cam0」和「cam1」來指定攝影機。
+例如imx219連接到cam0接口，ov5647攝影機連接到cam1接口。
