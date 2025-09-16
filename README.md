@@ -223,3 +223,15 @@ Image Size                      : 4056x3040
 Megapixels                      : 12.3
 Shutter Speed                   : 1/20
 ```
+
+我們注意到只有一個校準光源（由 AWB 演算法確定，儘管它始終標記為“D65”），將 ISO 數值除以 100 可得出所使用的模擬增益。
+## 超長曝光
+
+為了拍攝長曝光影像，請停用 AEC/AGC 和 AWB，因為這些演算法會強制使用者在收斂時等待很多影格。
+禁用它們的方法是提供明確的值。此外，可以使用 immediate 選項跳過拍攝的整個預覽階段。
+因此，要執行 100 秒的曝光拍攝，請使用：
+
+```bibtex
+rpicam-still -o long_exposure.jpg --shutter 100000000 --gain 1 --awbgains 1,1 --immediate
+```
+
