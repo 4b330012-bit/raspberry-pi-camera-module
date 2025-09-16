@@ -67,6 +67,7 @@ dtoverlay=imx219，cam0
 dtoverlay=ov5647，cam1
 ```
 ##測試相機命令
+
 進入樹莓派終端，啟用攝影機預覽：
 ```bibtex
 sudo libcamera-hello -t 0
@@ -82,6 +83,7 @@ sudo libcamera-hello -t 0 --camera 0
 sudo libcamera-hello -t 0 --camera 1
 ```
 ##前言
+
 查看自己使用的系統是什麼版本，運行sudo cat /etc/os-release查看是否有下面兩個鏡像的信息，然後選擇。
 
 Raspberry Pi OS Bookworm 將相機捕獲應用程式從 libcamera-* 更改為 rpicam-*，目前允許用戶繼續使用舊的 libcamera，但 libcamera 將來會被棄用，因此請盡快使用 rpicam。
@@ -141,6 +143,7 @@ rpicam-jpeg --ev 0.5 -o brighter.jpg
 ```
 
 ##數位增益
+
 數位增益由 ISP 應用，而非感測器。數位增益始終非常接近 1.0，除非：
 
 請求的總增益（透過選項 --gain 或相機調整中的曝光配置檔案）超過了感測器內可用作類比增益的增益。只有所需的額外增益才會用作數位增益。
@@ -148,5 +151,6 @@ rpicam-jpeg --ev 0.5 -o brighter.jpg
 AEC/AGC 正在改變。當 AEC/AGC 發生變化時，數位增益通常會發生一定程度的變化，以試圖消除任何波動，但很快就會恢復到正常值。
 
 ##rpicam-still
+
 它模擬了原始應用程式 raspistill 的許多功能。
 
