@@ -150,7 +150,23 @@ rpicam-jpeg --ev 0.5 -o brighter.jpg
 其中一個顏色增益小於 1（請注意，顏色增益也用作數字增益）。在這種情況下，發布的數位增益將穩定在 1/分鐘（紅色增益，藍色增益）。這意味著其中一個顏色通道（而不是綠色通道）應用了個位數增益。
 AEC/AGC 正在改變。當 AEC/AGC 發生變化時，數位增益通常會發生一定程度的變化，以試圖消除任何波動，但很快就會恢復到正常值。
 
-##rpicam-still
+## rpicam-still
 
 它模擬了原始應用程式 raspistill 的許多功能。
 
+```bibtex
+rpicam-still -o test.jpg
+```
+
+## 編碼器
+
+rpicam-still 允許以多種不同格式儲存檔案。它支援 PNG 和 BMP 編碼。它還允許將檔案儲存為 RGB 或 YUV 像素的二進位轉儲，無需編碼或檔案格式。在後一種情況下，讀取檔案的應用程式必須了解其自身的像素排列。
+
+```bibtex
+rpicam-still -e png -o test.png 
+rpicam-still -e bmp -o test.bmp 
+rpicam-still -e rgb -o test.data 
+rpicam-still -e yuv420 -o test.data
+```
+
+注意：儲存影像的格式取決於 -e（相當於編碼）選項，並且不會根據輸出檔案名稱自動選擇。
