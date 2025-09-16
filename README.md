@@ -27,3 +27,6 @@
 ```bibtex
 sudo apt-get update -y
 sudo apt-get upgrade -y
+```
+如果只呼叫一個鏡頭，請將相機連接到 CAM1 連接埠。
+如果您使用的不是官方的 Raspberry Pi 鏡頭，則需要設定「config.txt」檔案。如果您使用最新的 Bookworm 系統，則需要設定 /boot/firmware/config.txt。
