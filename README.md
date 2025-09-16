@@ -61,3 +61,36 @@ sudo cp imx290.json /usr/share/libcamera/ipa/rpi/pisp
 目前CM4載板和Raspberry Pi 5均支援連接兩個相機。
 如果要同時連接兩個鏡頭，可以在對應的攝影機配置語句後面加上「cam0」和「cam1」來指定攝影機。
 例如imx219連接到cam0接口，ov5647攝影機連接到cam1接口。
+
+```bibtex
+dtoverlay=imx219，cam0 
+dtoverlay=ov5647，cam1
+```
+##測試相機命令
+進入樹莓派終端，啟用攝影機預覽：
+```bibtex
+sudo libcamera-hello -t 0
+```
+
+如需關閉預覽窗口，可直接按下「Alt + F4」鍵，或點選「X」關閉。您也可以回到終端機介面，按下「Ctrl + c」結束示範。
+注意：如果使用“Camera Module 3”，則自動對焦功能已啟用。
+測試雙眼攝像頭
+
+測試雙眼相機時，需要新增「--camera」指定相機，如果不新增此參數，則預設指定「cam0」。
+```bibtex
+sudo libcamera-hello -t 0 --camera 0 
+sudo libcamera-hello -t 0 --camera 1
+```
+##前言
+查看自己使用的系統是什麼版本，運行sudo cat /etc/os-release查看是否有下面兩個鏡像的信息，然後選擇。
+
+Raspberry Pi OS Bookworm 將相機捕獲應用程式從 libcamera-* 更改為 rpicam-*，目前允許用戶繼續使用舊的 libcamera，但 libcamera 將來會被棄用，因此請盡快使用 rpicam。
+如果您使用的是 Raspberry Pi OS Bullseye 系統，請向下捲動頁面以使用本教學的 libcamera-* 部分。
+
+##遙控相機
+
+在執行最新版本的 Raspberry Pi OS 時，rpicam-apps 已安裝五個基本功能。在這種情況下，官方 Raspberry Pi 相機也會被偵測到並自動啟用。
+您可以輸入以下命令來檢查一切是否正常：
+```bibtex
+rpicam-hello
+```
