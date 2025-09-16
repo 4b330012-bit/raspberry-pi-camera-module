@@ -170,3 +170,56 @@ rpicam-still -e yuv420 -o test.data
 ```
 
 注意：儲存影像的格式取決於 -e（相當於編碼）選項，並且不會根據輸出檔案名稱自動選擇。
+
+## 原始影像擷取
+原始影像是指影像感測器直接產生的影像，未經 ISP（影像訊號處理器）或任何 CPU 核心處理。對於彩色影像感測器，這些影像通常是拜耳格式。請注意，原始影像與我們之前看到的經過處理但未編碼的 RGB 或 YUV 影像有很大不同。
+取得原始影像：
+```bibtex
+rpicam-still --raw --output test.jpg
+```
+這裡，-r 選項（也稱為 raw）表示捕捉原始影像和 JPEG。實際上，原始影像是生成 JPEG 的原始影像。原始影像以 DNG（Adobe 數位負片）格式儲存，並與許多標準應用程式（例如 draw 或 RawTherapee）相容。原始映像保存為同名但擴展名為 .ng 的文件，因此成為 test.dng。
+這些 DNG 檔案包含與影像擷取相關的元數據，包括黑色電平、白平衡資訊以及 ISP 用於產生 JPEG 的色彩矩陣。這使得這些 DNG 檔案將來更方便地與上述某些工具一起進行「手動」原始轉換。使用 exiftool 顯示編碼到 DNG 檔案中的所有元資料：
+```
+File Name                       : test.dng
+Directory                       : .
+File Size                       : 24 MB
+File Modification Date/Time     : 2021:08:17 16:36:18+01:00
+File Access Date/Time           : 2021:08:17 16:36:18+01:00
+File Inode Change Date/Time     : 2021:08:17 16:36:18+01:00
+File Permissions                : rw-r--r--
+File Type                       : DNG
+File Type Extension             : dng
+MIME Type                       : image/x-adobe-dng
+Exif Byte Order                 : Little-endian (Intel, II)
+Make                            : Raspberry Pi
+Camera Model Name               : /base/soc/i2c0mux/i2c@1/imx477@1a
+Orientation                     : Horizontal (normal)
+Software                        : rpicam-still
+Subfile Type                    : Full-resolution Image
+Image Width                     : 4056
+Image Height                    : 3040
+Bits Per Sample                 : 16
+Compression                     : Uncompressed
+Photometric Interpretation      : Color Filter Array
+Samples Per Pixel               : 1
+Planar Configuration            : Chunky
+CFA Repeat Pattern Dim          : 2 2
+CFA Pattern 2                   : 2 1 1 0
+Black Level Repeat Dim          : 2 2
+Black Level                     : 256 256 256 256
+White Level                     : 4095
+DNG Version                     : 1.1.0.0
+DNG Backward Version            : 1.0.0.0
+Unique Camera Model             : /base/soc/i2c0mux/i2c@1/imx477@1a
+Color Matrix 1                  : 0.8545269369 -0.2382823821 -0.09044229197 -0.1890484985 1.063961506 0.1062747385 -0.01334283455 0.1440163847 0.2593136724
+As Shot Neutral                 : 0.4754476844 1 0.413686484
+Calibration Illuminant 1        : D65
+Strip Offsets                   : 0
+Strip Byte Counts               : 0
+Exposure Time                   : 1/20
+ISO                             : 400
+CFA Pattern                     : [Blue,Green][Green,Red]
+Image Size                      : 4056x3040
+Megapixels                      : 12.3
+Shutter Speed                   : 1/20
+```
