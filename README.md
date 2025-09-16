@@ -22,7 +22,9 @@
 |IMX296（Raspberry Pi 全球攝影機）|所有 Raspberry Pi 開發板	  |庫相機                  |
 
 ##測試相機
+
 ##軟體設定
+
 如果您使用的是最新的 Raspberry Pi 相機模組 3 或 Raspberry Pi 全域快門相機，則需要執行以下命令來更新系統（需要網路連線）。
 ```bibtex
 sudo apt-get update -y
