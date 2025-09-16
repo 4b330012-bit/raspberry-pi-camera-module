@@ -36,3 +36,14 @@ sudo nano /boot/config.txt
 #如果使用 bookworm 系統
 sudo nano /boot/firmware/config.txt
 ```
+
+找到“camera-auto-detect=1”並將其修改為“camera_auto_detect=0”。
+在文件最後根據相機型號添加以下設定語句。
+|模型	          |設定語句                              |
+|---------------|-------------------------------------|
+|OV9281	        |dtoverlay=ov9281                     |
+|IMX290/IMX327	|dtoverlay=imx290，時脈頻率=37125000    |
+|IMX378	        |dtoverlay=imx378                     |
+|IMX219	        |dtoverlay=imx219                     |
+|IMX477	        |dtoverlay=imx477                     |
+|IMX708	        |dtoverlay=imx708                     |
