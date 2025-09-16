@@ -21,9 +21,9 @@
 |IMX708（樹莓派相機模組 3）	      |所有 Raspberry Pi 開發板	  |庫相機                  |
 |IMX296（Raspberry Pi 全球攝影機）|所有 Raspberry Pi 開發板	  |庫相機                  |
 
-##測試相機
+## 測試相機
 
-##軟體設定
+## 軟體設定
 
 如果您使用的是最新的 Raspberry Pi 相機模組 3 或 Raspberry Pi 全域快門相機，則需要執行以下命令來更新系統（需要網路連線）。
 ```bibtex
@@ -66,7 +66,7 @@ sudo cp imx290.json /usr/share/libcamera/ipa/rpi/pisp
 dtoverlay=imx219，cam0 
 dtoverlay=ov5647，cam1
 ```
-##測試相機命令
+## 測試相機命令
 
 進入樹莓派終端，啟用攝影機預覽：
 ```bibtex
@@ -82,14 +82,14 @@ sudo libcamera-hello -t 0
 sudo libcamera-hello -t 0 --camera 0 
 sudo libcamera-hello -t 0 --camera 1
 ```
-##前言
+## 前言
 
 查看自己使用的系統是什麼版本，運行sudo cat /etc/os-release查看是否有下面兩個鏡像的信息，然後選擇。
 
 Raspberry Pi OS Bookworm 將相機捕獲應用程式從 libcamera-* 更改為 rpicam-*，目前允許用戶繼續使用舊的 libcamera，但 libcamera 將來會被棄用，因此請盡快使用 rpicam。
 如果您使用的是 Raspberry Pi OS Bullseye 系統，請向下捲動頁面以使用本教學的 libcamera-* 部分。
 
-##遙控相機
+## 遙控相機
 
 在執行最新版本的 Raspberry Pi OS 時，rpicam-apps 已安裝五個基本功能。在這種情況下，官方 Raspberry Pi 相機也會被偵測到並自動啟用。
 您可以輸入以下命令來檢查一切是否正常：
@@ -127,7 +127,7 @@ rpicam-jpeg -o test.jpg
 rpicam-jpeg -o test.jpg -t 2000 --width 640 --height 480
 ```
 
-##曝光控制
+## 曝光控制
 
 所有這些 rpicam-apps 都允許使用者以固定的快門速度和增益運行相機。拍攝一張曝光時間為 20ms、增益為 1.5 倍的影像。此增益將用作感測器內的類比增益，直到達到核心感測器驅動程式允許的最大類比增益。之後，剩餘部分將用作數位增益。
 
@@ -142,7 +142,7 @@ rpicam-jpeg --ev 0 -o normal.jpg
 rpicam-jpeg --ev 0.5 -o brighter.jpg
 ```
 
-##數位增益
+## 數位增益
 
 數位增益由 ISP 應用，而非感測器。數位增益始終非常接近 1.0，除非：
 
