@@ -7,18 +7,18 @@
 將 FPC 線纜的金屬面朝向有線網路端口，然後連接到 CSI 連接埠。 Pi 5 有兩個 CSI 連接埠；任一連接埠皆可連線。
 
 ##關於模型
-|感光晶片型號                     |支援的 Raspberry Pi 板型號	|支援的驅動程式類型        |
+|感光晶片型號                     |支援的 Raspberry Pi 板型號 |支援的驅動程式類型        |
 |-------------------------------|-------------------------|-----------------------|
 |OV5647	                        |所有 Raspberry Pi 開發板	  |libcamera/Raspicam     |
 |OV9281	                        |所有 Raspberry Pi 開發板	  |庫相機                  |
 |IMX219（官方樹莓派）	            |所有 Raspberry Pi 開發板	  |libcamera/Raspicam     |
-|IMX219（第三方）	                |Raspberry Pi 計算模組	    |庫相機                  |
+|IMX219（第三方）	                |Raspberry Pi 計算模組	  |庫相機                  |
 |IMX290/IMX327	                |所有 Raspberry Pi 開發板	  |庫相機                  |
 |IMX378	                        |所有 Raspberry Pi 開發板	  |庫相機                  |
 |IMX477（官方樹莓派）             |所有 Raspberry Pi 開發板	  |libcamera/Raspicam     |
-|IMX477（第三方）	                |Raspberry Pi 計算模組	    |庫相機                  |
+|IMX477（第三方）	                |Raspberry Pi 計算模組	  |庫相機                  |
 |IMX519	                        |所有 Raspberry Pi 開發板	  |libcamera（需要驅動程式） |
-|IMX708（樹莓派相機模組 3）	      |所有 Raspberry Pi 開發板	  |庫相機                  |
+|IMX708（樹莓派相機模組 3）	    |所有 Raspberry Pi 開發板	  |庫相機                  |
 |IMX296（Raspberry Pi 全球攝影機）|所有 Raspberry Pi 開發板	  |庫相機                  |
 
 ## 測試相機
@@ -454,5 +454,34 @@ rpicam-hello-t 0
 ```
 --preview 設定桌面或 DRM 預覽視窗的位置（x,y 座標）和大小（w,h 尺寸）。這對從相機請求的影像的解析度或寬高比沒有影響。
 以以下逗號分隔的形式傳遞預覽視窗尺寸：x、y、w、h
+```bibtex
+rpicam-hello --preview 100,100,500,500
+```
+rpicam-hello --preview 100,100,500,500
+```bibtex
+rpicam-hello-f
+```
+--qt-preview 使用 Qt 預覽窗口，比其他選項消耗更多資源，但支援 X 視窗轉送。不相容全螢幕標誌。不接受值。
+
+```bibtex
+rpicam-hello --qt-preview
+```
+--nopreview 使應用程式不顯示預覽視窗。不接受任何值。
+
+```bibtex
+rpicam-hello --nopreview
+```
+|命令	    |描述                                 |
+-------------------------------------------------|
+|％框架	    |影格序號                             |
+|%幀率	    |瞬間幀率                             |
+|%exp	    |拍攝影像的快門速度（以毫秒為單位）       |
+|%ag	    |感光晶片控制影像模擬增益               |
+|%dg	    |影像訊號增益由ISP控制                 |
+|%rg	    |每個像素點紅色分量的增益               |
+|%體重	    |每個像素點藍色分量的增益               |
+|％重點	    |影像的角點度量，數值越大，影像越清晰     |
+|%lp	    |目前鏡頭的屈光度（距離以 1/公尺為單位）  |
+|%afstate	|自動對焦狀態（空閒、掃描、對焦、失敗）   |
 
 
