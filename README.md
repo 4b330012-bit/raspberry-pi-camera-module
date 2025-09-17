@@ -266,4 +266,44 @@ rpicam-vid -t 10000 --codec mjpeg -o test.mjpeg
 rpicam-vid -t 10000 --codec yuv420 -o test.data
 ```
 
+codec 選項決定輸出格式，而不是輸出檔案的副檔名。 segment
+選項將輸出檔案分割成多個段大小的區塊（以毫秒為單位）。透過指定極短的段（1 毫秒），可以方便地將移動的 JPEG 流分解成單一 JPEG 檔案。例如，以下命令將 1 毫秒的段與輸出檔名中的計數器組合，為每個段產生一個新的檔名：
 
+```bibtex
+rpicam-vid -t 10000 --codec mjpeg --segment 1 -o test%05d.jpeg
+```
+
+## 捕捉高幀率視頻
+
+為了最大限度地減少高幀率（> 60fps）影片的幀丟失，請嘗試以下配置調整：
+
+使用參數--level 4.2將H.264的目標等級設定為4.2
+透過將降噪選項設為 cdn_off 來停用軟體顏色降噪處理。
+停用 nopreview 的顯示視窗以釋放額外的 CPU 週期。
+在 /boot/firmware/config.txt 中設定 force_turbo=1，以確保在視訊擷取期間 CPU 時脈不會受到限制。有關更多信息，請參閱force_turbo文檔。
+將ISP輸出解析度參數調整為--width 1280 --height 720或更低即可達到幀率目標。
+在 Raspberry Pi 4 上，您可以透過在 /boot/firmware/config.txt 中加入 gpu_freq=550 或更高的頻率來超頻 GPU，從而提升效能。有關詳細信息，請參閱超頻文件。
+以下指令示範如何實現1280×720 120fps的影片：
+
+```bibtex
+rpicam-vid --level 4.2 --framerate 120 --width 1280 --height 720 --save-pts timestamp.pts -o video.264 -t 10000 --denoise cdn_off -n
+```
+
+## Libav 與 picam-vid 的集成
+
+Rpicam-vid 可以使用 ffmpeg/libav 編解碼器後端對音訊和視訊串流進行編碼。您可以將這些流儲存到檔案中，或透過網路進行串流傳輸。
+若要啟用 libav 後端，請將 libav 傳遞給 codec 選項：
+
+```bibtex
+rpicam-vid --codec libav --libav-format avi --libav-audio --output example.avi
+```
+
+## UDP
+
+若要將 Raspberry Pi 用作透過 UDP 傳輸串流視訊的伺服器，請使用下列命令，將 < IP -addr> 佔位符替換為用戶端或多重播放位址的 IP 位址，並將 <port> 佔位符替換為您要用於串流傳輸的連接埠：
+
+```bibtex
+rpicam-vid -t 0 --inline -o udp://<ip-addr>:<port>
+```
+
+使用 Raspberry Pi 作為客戶端透過 UDP 觀看視訊串流，使用以下命令，將 <port> 佔位符替換為您要串流傳輸的連接埠：
