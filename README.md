@@ -307,3 +307,152 @@ rpicam-vid -t 0 --inline -o udp://<ip-addr>:<port>
 ```
 
 使用 Raspberry Pi 作為客戶端透過 UDP 觀看視訊串流，使用以下命令，將 <port> 佔位符替換為您要串流傳輸的連接埠：
+
+```bibtex
+vlc udp://@:<port> :demux=h264
+```
+
+或者，在客戶端使用 ffplay 透過以下命令進行串流：
+
+```bibtex
+ffplay udp://<ip-addr-of-server>:<port> -fflags nobuffer -flags low_delay -framedrop
+```
+
+## TCP
+
+視訊也可以透過 TCP 傳輸。使用 Raspberry Pi 作為伺服器：
+```bibtex
+rpicam-vid -t 0 --inline --listen -o tcp://0.0.0.0:<port>
+```
+使用Raspberry Pi作為客戶端透過TCP觀看視訊串流，使用以下命令：
+
+```bibtex
+vlc tcp/h264://<ip-addr-of-server>:<port>
+```
+
+或者，在客戶端使用以下命令以每秒 30 幀的速度使用 ffplay 流：
+
+```bibtex
+ffplay tcp://<ip-addr-of-server>:<port> -vf "setpts=N/30" -fflags nobuffer -flags low_delay -framedrop
+```
+## RTSP
+
+要使用 VLC 透過 RTSP 傳輸視頻，並使用 Raspberry Pi 作為伺服器，請使用以下命令：
+```bibtex
+rpicam-vid -t 0 --inline -o - | cvlc stream:///dev/stdin --sout '#rtp{sdp=rtsp://:8554/stream1}' :demux=h264
+```
+
+若要使用 Raspberry Pi 作為客戶端查看 RTSP 上的視訊串流，請使用以下命令：
+```bibtex
+ffplay rtsp://<ip-addr-of-server>:8554/stream1 -vf "setpts=N/30" -fflags nobuffer -flags low_delay -framedrop
+```
+
+或在客戶端使用以下命令透過 VLC 進行串流：
+```bibtex
+vlc rtsp://<ip-addr-of-server>:8554/stream1
+```
+
+## rpicam-raw
+
+rpicam-raw 會直接從感應器錄製視頻，並將其作為原始拜耳幀。它不會顯示預覽視窗。若要將兩秒鐘的原始片段錄製到名為 test.raw 的檔案中，請執行以下命令：
+```bibtex
+rpicam-raw -t 2000 -o test.raw
+```
+
+RPICAM-RAW 輸出原始幀，不包含任何格式資訊。該應用程式會將像素格式和圖像大小列印到終端窗口，以幫助用戶解析像素資料。
+預設情況下，rpicam-raw 將原始幀輸出到一個可能非常大的檔案中。使用 segments 選項將每個原始幀定向到單獨的文件，並使用 %05d 指令使每個幀的文件名唯一：
+```bibtex
+rpicam-raw -t 2000 --segment 1 -o test%05d.raw
+```
+
+使用快速儲存設備，rpicam-raw 可以以 10fps 的速度將 1,2 百萬像素 HQ 相機的 18MB 幀寫入磁碟。 rpicam-raw 無法將輸出幀格式化為 DNG 檔案；為此，請使用低於 10 的幀速率的 rpicam-still 選項以避免丟幀：
+
+```bibtex
+rpicam-raw -t 5000 --width 4056 --height 3040 -o test.raw --framerate 8
+```
+
+## rpicam-檢測
+
+注意：Raspberry Pi 作業系統不包含 rpicam-detect。如果您已安裝 TensorFlow Lite，則可以建置 rpicam-detect。執行 cmake 時，請不要忘記傳遞 -DENABLE_TFLITE=1。 rpicam-detect 會顯示一個預覽窗口，並使用 Google MobileNet v1 SSD（單次偵測器）神經網路監控內容，該網路已使用 Coco 資料集訓練，可識別約 80 個類別的物件。 rpicam-detect 可以辨識人、車、貓和許多其他物體。每當 rpicam-detect 偵測到目標物體時，它都會捕捉全解析度 JPEG 影像。然後返回監控預覽模式。有關模型使用的一般信息。例如，當您外出時，您可以照顧您的貓：
+```bibtex
+rpicam-detect -t 0 -o cat%04d.jpg --lores-width 400 --lores-height 300 --post-process-file object_detect_tf.json --object cat
+```
+
+## rpicam參數設定
+
+--help -h 列印所有選項以及每個選項的簡要說明
+```bibtex
+rpicam-hello-h
+```
+
+--version 輸出 libcamera 和 rpicam-apps 的版本字串
+```bibtex
+rpicam-hello --version
+```
+
+範例輸出：
+
+```bibtex
+rpicam-apps build: ca559f46a97a 27-09-2021 (14:10:24)
+libcamera build: v0.0.0+3058-c29143f7
+```
+
+--list-cameras 列出連接到 Raspberry Pi 的攝影機及其可用的感測器模式
+
+```bibtex
+rpicam-hello --list-cameras
+```
+
+感測器模式的標識符具有以下形式：
+```bibtex
+S<Bayer order><Bit-depth>_<Optional packing> : <Resolution list>
+```
+裁切以感測器原生像素（即使在像素合併模式）指定為 (<x>, <y>)/<Width>×<Height>。 (x, y) 指定感測器陣列中寬度 × 高度裁剪視窗的位置。
+例如，以下輸出顯示了索引為 0 的 IMX219 感測器和索引為 1 的 IMX477 感測器的資訊：
+```
+Available cameras
+-----------------
+0 : imx219 [3280x2464] (/base/soc/i2c0mux/i2c@1/imx219@10)
+    Modes: 'SRGGB10_CSI2P' : 640x480 [206.65 fps - (1000, 752)/1280x960 crop]
+                             1640x1232 [41.85 fps - (0, 0)/3280x2464 crop]
+                             1920x1080 [47.57 fps - (680, 692)/1920x1080 crop]
+                             3280x2464 [21.19 fps - (0, 0)/3280x2464 crop]
+           'SRGGB8' : 640x480 [206.65 fps - (1000, 752)/1280x960 crop]
+                      1640x1232 [41.85 fps - (0, 0)/3280x2464 crop]
+                      1920x1080 [47.57 fps - (680, 692)/1920x1080 crop]
+                      3280x2464 [21.19 fps - (0, 0)/3280x2464 crop]
+1 : imx477 [4056x3040] (/base/soc/i2c0mux/i2c@1/imx477@1a)
+    Modes: 'SRGGB10_CSI2P' : 1332x990 [120.05 fps - (696, 528)/2664x1980 crop]
+           'SRGGB12_CSI2P' : 2028x1080 [50.03 fps - (0, 440)/4056x2160 crop]
+                             2028x1520 [40.01 fps - (0, 0)/4056x3040 crop]
+                             4056x3040 [10.00 fps - (0, 0)/4056x3040 crop]
+```
+
+--camera 選擇要使用的攝影機。請從可用攝影機清單中指定索引。
+```bibtex
+rpicam-hello --list-cameras 0 
+rpicam-hello --list-cameras 1
+```
+
+--config -c 指定一個包含指令參數選項和值的檔案。通常，名為 example_configuration.txt 的檔案以鍵值對的形式指定選項和值，每個選項佔一行。
+```bibtex
+timeout=99000
+verbose=
+```
+注意：命令列中通常會省略參數前綴“--”。對於缺少值的標誌（例如上例中的 verbose），必須在末尾加上“=”。
+然後，您可以執行以下命令來指定 99,000 毫秒的逾時時間和詳細輸出：
+```bibtex
+rpicam-hello --config example_configuration.txt
+```
+--time -t，預設延遲5000毫秒
+```bibtex
+rpicam-hello-t
+```
+指定應用程式在關閉前運行的時間。這適用於視訊錄製視窗和預覽視窗。捕獲靜態影像時，應用程式會顯示一個預覽窗口，並在輸出捕獲的影像之前等待幾毫秒。
+```bibtex
+rpicam-hello-t 0
+```
+--preview 設定桌面或 DRM 預覽視窗的位置（x,y 座標）和大小（w,h 尺寸）。這對從相機請求的影像的解析度或寬高比沒有影響。
+以以下逗號分隔的形式傳遞預覽視窗尺寸：x、y、w、h
+
+
