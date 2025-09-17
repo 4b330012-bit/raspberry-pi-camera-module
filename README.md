@@ -235,3 +235,35 @@ Shutter Speed                   : 1/20
 rpicam-still -o long_exposure.jpg --shutter 100000000 --gain 1 --awbgains 1,1 --immediate
 ```
 
+## rpicam-vid
+
+rpicam-vid 可以幫助我們在 Raspberry Pi 裝置上擷取影片。 rpicam-vid 會顯示一個預覽窗口，並將編碼後的位元流寫入指定的輸出。這將產生一個未打包的視訊位元流，該位元流未以任何容器格式（例如 mp4 檔案）打包。
+
+rpicam-vid 使用 H.264 編碼
+例如，以下命令將 10 秒的影片寫入名為 test.h264 的檔案中：
+```bibtex
+rpicam-vid -t 10s -o test.h264
+```
+
+您可以使用 VLC 和其他視訊播放器播放結果檔案：
+
+```bibtex
+VLC test.h264
+```
+
+在 Raspberry Pi 5 上，您可以透過指定輸出檔案的 MP4 檔案副檔名直接輸出為 MP4 容器格式：
+
+```bibtex
+rpicam-vid -t 10s -o test.mp4
+```
+
+## 編碼器
+
+rpicam-vid 支援動態 JPEG 以及未壓縮和未格式化的 YUV420：
+
+```bibtex
+rpicam-vid -t 10000 --codec mjpeg -o test.mjpeg 
+rpicam-vid -t 10000 --codec yuv420 -o test.data
+```
+
+
